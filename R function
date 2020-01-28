@@ -1,0 +1,29 @@
+### CREATING THE EUCLIDEAN DISTANCE MATRIX by WINKELMAN et al. (2015) ###
+### AS IN DIST*(X) ### OPTIMIZED ###
+
+mydist<-function (x) 
+{start.time <- Sys.time()
+{
+  ### CREATING MML ###
+  MML<-tcrossprod(x)
+  
+  ### DIAGONAL OF MML ###
+  S<-diag(MML)
+  
+  ### CREATING THE EUCLIDEAN DISTANCE MATRIX by WINKELMAN et al. (2015) ###
+  EDM<-matrix(NA,nrow=nrow(MML),ncol=ncol(MML))
+  dimnames(EDM)[[1]] <- rownames(MML)
+  dimnames(EDM)[[2]] <- colnames(MML)
+  for(i in 1:dim(MML)[1]){
+    for(j in 1:dim(MML)[2]){
+      EDM[i,j] <- sqrt(S[i]+S[j]-2*MML[i,j])
+      #print(i)
+    }
+  }
+}
+cat('\n',"_______________THE EUCLIDEAN DISTANCE MATRIX by WINKELMAN IS READY!!!_______________")
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+#print(time.taken)
+return(EDM)
+}
