@@ -1,0 +1,45 @@
+### CREATING THE EUCLIDEAN DISTANCE MATRIX by WINKELMAN et al. (2015) ###
+### THIS VERSION CAN ACCOMODATE A WEIGHTING VECTOR FOR THE X COLUMNS ###
+
+#x: a matrix from where euclidean distance values are supposed to be calculated
+#w: the vector for weights for the x colummn
+mydist<-function (x, w) 
+{start.time <- Sys.time()
+{
+  
+  ### CREATING MML ###
+  if (missing(w)==T){
+    MML<-tcrossprod(x)
+  }else{
+    n = dim(x)[1]
+    p = dim(x)[2]
+    
+    Xw = matrix(NA, n,p)
+    for (k in 1:p){
+     Xw[,k] <-  x[,k]*w[k]
+     #print(k)
+    }
+ 
+    MML<-tcrossprod(Xw, x)
+    print("Weighted MML ready")
+  }
+  ### DIAGONAL OF MML ###
+  S<-diag(MML)
+  
+  ### CREATING THE EUCLIDEAN DISTANCE MATRIX by WINKELMAN et al. (2015) ###
+  EDM<-matrix(NA,nrow=nrow(MML),ncol=ncol(MML))
+  dimnames(EDM)[[1]] <- rownames(MML)
+  dimnames(EDM)[[2]] <- colnames(MML)
+  for(i in 1:dim(MML)[1]){
+    for(j in 1:dim(MML)[2]){
+      EDM[i,j] <- sqrt(S[i]+S[j]-2*MML[i,j])
+      #print(i)
+    }
+  }
+}
+cat('\n',"_______________THE EUCLIDEAN DISTANCE MATRIX by WINKELMAN IS READY!!!_______________")
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+print(time.taken)
+return(EDM)
+}
